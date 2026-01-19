@@ -128,13 +128,13 @@ const getStanceColor = (stance: string) => {
   }
 };
 
-// Reaction options
+// Reaction options for picker
 const reactionOptions = [
   { emoji: "👍", label: "Stimme zu" },
   { emoji: "👎", label: "Stimme nicht zu" },
   { emoji: "💡", label: "Gutes Argument" },
   { emoji: "🤨", label: "Das glaube ich nicht" },
-  { emoji: "🔍", label: "Wir sollten die Fakten klären" },
+  { emoji: "🔍", label: "Mehr Infos nötig" },
   { emoji: "🧠", label: "Sollten wir vertiefen" },
   { emoji: "❓", label: "Bitte genauer erklären" },
 ];
@@ -204,6 +204,14 @@ export default function App() {
     setSelectedVote(option);
   };
 
+  const handleLikeVote = (option: string) => {
+    setScenarioVoteLike(option);
+  };
+
+  const handleRealisticVote = (option: string) => {
+    setScenarioVoteRealistic(option);
+  };
+
   const submitVote = () => {
     if (selectedVote) {
       setCurrentScreen(2);
@@ -265,13 +273,14 @@ export default function App() {
             currentScreen === 1 ? "Abstimmung" : 
             currentScreen === 2 ? "Chat" : 
             currentScreen === 3 ? "Reaktionen" :
-            "Zukunft"
+            currentScreen === 4 ? "Zukunft" :
+            "Diskussionsvorschlag"
           }
         </div>
         <input
           type="range"
           min="0"
-          max="4"
+          max="5"
           value={currentScreen}
           onChange={(e) => setCurrentScreen(Number(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#5B9EFF]"
@@ -282,6 +291,7 @@ export default function App() {
           <span>Chat</span>
           <span>React</span>
           <span>Futur</span>
+          <span>Disk</span>
         </div>
       </div>
 
@@ -301,10 +311,10 @@ export default function App() {
         {/* Header */}
         <div className="h-11 bg-white border-b border-gray-200 flex items-center px-4 relative">
           <button className="p-1">
-            <ChevronLeft className="w-6 h-6" />
+            {currentScreen !== 5 && <ChevronLeft className="w-6 h-6" />}
           </button>
           <div className="absolute left-1/2 -translate-x-1/2 text-[17px] font-medium whitespace-nowrap">
-            PFAS Verbot
+            {currentScreen !== 5 ? "PFAS Verbot" : ""}
           </div>
           <button className="p-1 ml-auto">
             <MoreVertical className="w-6 h-6" />
@@ -635,28 +645,10 @@ export default function App() {
               
               {/* Message with Reaction Picker */}
               <div className="mb-3 flex justify-start">
-                <div className="max-w-[320px]">
-                  {/* Reaction Picker Bubble */}
-                  <div className="bg-white rounded-full px-3 py-2 mb-2 flex items-center gap-1 shadow-lg border border-gray-200">
-                    {reactionOptions.map((reaction) => (
-                      <button
-                        key={reaction.emoji}
-                        className={`text-2xl p-1 rounded-full transition-all duration-150 hover:scale-125 ${
-                          selectedReaction === reaction.emoji ? "bg-gray-100 scale-110" : ""
-                        }`}
-                        onClick={() => handleReactionSelect(reaction.emoji)}
-                        onMouseEnter={() => setHoveredReaction(reaction.emoji)}
-                        onMouseLeave={() => setHoveredReaction(null)}
-                      >
-                        {reaction.emoji}
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {/* Always visible Reaction Label */}
-                  <div className="bg-white text-gray-700 text-xs px-3 py-1.5 rounded-lg mb-3 text-center shadow-sm border border-gray-200">
-                    {getReactionLabel()}
-                  </div>
+                <div className="">
+              
+
+                
                   
                   {/* The Message */}
                   <div className="text-[11px] text-gray-500 mb-1 ml-2">
@@ -676,17 +668,37 @@ export default function App() {
                     </div>
                   </div>
                   
-                  {/* Reactions below message */}
-                  <div className="flex items-center gap-1 mt-1.5 ml-1">
-                    {chatMessages[0].reactions.map((reaction, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-gray-200 rounded-full px-2 py-1 flex items-center gap-1"
-                      >
-                        <span className="text-sm">{reaction.emoji}</span>
-                        <span className="text-xs text-gray-700">{reaction.count}</span>
-                      </div>
-                    ))}
+                  {/* Reaction Buttons - Full labels using reactionOptions */}
+                  <div className="grid grid-cols-2 gap-1.5 mt-3">
+                    {reactionOptions.map((reaction) => {
+                      const matchingReaction = chatMessages[0].reactions.find(r => r.emoji === reaction.emoji);
+                      const count = matchingReaction?.count || 0;
+                      const isSelected = selectedReaction === reaction.emoji;
+                      
+                      return (
+                        <button
+                          key={reaction.emoji}
+                          onClick={() => handleReactionSelect(reaction.emoji)}
+                          className={`rounded-full px-2.5 py-1.5 flex items-center gap-1 transition-colors border ${
+                            isSelected 
+                              ? "bg-[#1e3a5f] border-[#1e3a5f]" 
+                              : "bg-white border-gray-200 hover:bg-gray-50"
+                          }`}
+                        >
+                          <span className="text-sm">{reaction.emoji}</span>
+                          <span className={`text-[11px] font-medium truncate ${
+                            isSelected ? "text-white" : "text-gray-700"
+                          }`}>
+                            {reaction.label}
+                          </span>
+                          <span className={`text-[11px] font-medium ml-auto ${
+                            isSelected ? "text-gray-300" : "text-gray-500"
+                          }`}>
+                            {count > 0 ? count : ""}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -694,7 +706,7 @@ export default function App() {
 
             <InputBar showBackButton onBack={() => setCurrentScreen(2)} />
           </>
-        ) : (
+        ) : currentScreen === 4 ? (
           <>
             {/* Scenario Screen */}
             <div className="flex-1 overflow-y-auto bg-[#f0f0f5] px-6 py-8 flex flex-col">
@@ -710,109 +722,159 @@ export default function App() {
                   „Ich möchte Sie gern einladen. In dieser Stadt gibt es das erste aquane Restaurant. Dort werden alle Speisen mit garantiert sauberem Wasser gekocht. Die haben sogar einen aquanen Wein.“
                 </p>
               </div>
+              {/* Question Card */}
+              <div className="mb-6 flex justify-start">
+                <div className="bg-white rounded-[18px] p-4 shadow-sm w-full">
+                  <div className="text-[15px] font-medium mb-4 text-gray-800 text-center">
+                    Halten Sie dies für realistisch?
+                  </div>
+                  
+                  {/* Voting Options */}
+                  <div className="flex justify-between items-end gap-3 mb-4">
+                    {votingOptions.map((option) => (
+                      <div
+                        key={option.label}
+                        className="flex flex-col items-center cursor-pointer"
+                        onClick={() => handleRealisticVote(option.label)}
+                      >
+                        <div
+                          className={`w-12 h-12 rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+                            scenarioVoteRealistic === option.label
+                              ? "border-4"
+                              : "border-gray-300 hover:border-gray-400"
+                          }`}
+                          style={{
+                            borderColor: scenarioVoteRealistic === option.label ? option.color : undefined,
+                            backgroundColor: scenarioVoteRealistic === option.label ? `${option.color}20` : "transparent",
+                          }}
+                        >
+                          {scenarioVoteRealistic === option.label && (
+                            <div
+                              className="w-6 h-6 rounded-full"
+                              style={{ backgroundColor: option.color }}
+                            />
+                          )}
+                        </div>
+                        <div className="text-[10px] text-gray-600 mt-2 text-center whitespace-nowrap">
+                          {option.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-              {/* Chart 1: Realistisch */}
-              <div className="bg-white rounded-[24px] p-4 shadow-sm mb-6">
-                <div className="text-xs font-medium mb-2 text-gray-600">
-                  Halten Sie es für realistisch?
-                </div>
-                <div className="h-[160px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={realisticData}
-                      margin={{
-                        top: 5,
-                        right: 5,
-                        left: -20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#e5e7eb"
-                      />
-                      <XAxis
-                        dataKey="opinion"
-                        tick={{ fill: "#6b7280", fontSize: 10 }}
-                        axisLine={{ stroke: "#d1d5db" }}
-                      />
-                      <YAxis
-                        tick={{ fill: "#6b7280", fontSize: 10 }}
-                        axisLine={{ stroke: "#d1d5db" }}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#fff",
-                          border: "1px solid #e5e7eb",
-                          borderRadius: "8px",
-                          fontSize: "11px",
-                        }}
-                      />
-                      <Bar dataKey="votes" radius={[6, 6, 0, 0]}>
-                        {realisticData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={entry.color}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                  {/* Submit Button */}
+                  <button
+                    onClick={submitVote}
+                    disabled={!scenarioVoteRealistic}
+                    className={`w-full py-2 rounded-full text-[15px] font-medium transition-all ${
+                      scenarioVoteRealistic
+                        ? "bg-[#5B9EFF] text-white"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    Abstimmen
+                  </button>
                 </div>
               </div>
+              {/* Question Card */}
+              <div className="mb-6 flex justify-start">
+                <div className="bg-white rounded-[18px] p-4 shadow-sm w-full">
+                  <div className="text-[15px] font-medium mb-4 text-gray-800 text-center">
+                    Würde es Ihnen gefallen?
+                  </div>
+                  
+                  {/* Voting Options */}
+                  <div className="flex justify-between items-end gap-3 mb-4">
+                    {votingOptions.map((option) => (
+                      <div
+                        key={option.label}
+                        className="flex flex-col items-center cursor-pointer"
+                        onClick={() => handleLikeVote(option.label)}
+                      >
+                        <div
+                          className={`w-12 h-12 rounded-full border-2 transition-all duration-200 flex items-center justify-center ${
+                            scenarioVoteLike === option.label
+                              ? "border-4"
+                              : "border-gray-300 hover:border-gray-400"
+                          }`}
+                          style={{
+                            borderColor: scenarioVoteLike === option.label ? option.color : undefined,
+                            backgroundColor: scenarioVoteLike === option.label ? `${option.color}20` : "transparent",
+                          }}
+                        >
+                          {scenarioVoteLike === option.label && (
+                            <div
+                              className="w-6 h-6 rounded-full"
+                              style={{ backgroundColor: option.color }}
+                            />
+                          )}
+                        </div>
+                        <div className="text-[10px] text-gray-600 mt-2 text-center whitespace-nowrap">
+                          {option.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-              {/* Chart 2: Gefallen */}
-              <div className="bg-white rounded-[24px] p-4 shadow-sm mb-6">
-                <div className="text-xs font-medium mb-2 text-gray-600">
-                  Würde es Ihnen gefallen?
-                </div>
-                <div className="h-[160px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={likingData}
-                      margin={{
-                        top: 5,
-                        right: 5,
-                        left: -20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#e5e7eb"
-                      />
-                      <XAxis
-                        dataKey="opinion"
-                        tick={{ fill: "#6b7280", fontSize: 10 }}
-                        axisLine={{ stroke: "#d1d5db" }}
-                      />
-                      <YAxis
-                        tick={{ fill: "#6b7280", fontSize: 10 }}
-                        axisLine={{ stroke: "#d1d5db" }}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#fff",
-                          border: "1px solid #e5e7eb",
-                          borderRadius: "8px",
-                          fontSize: "11px",
-                        }}
-                      />
-                      <Bar dataKey="votes" radius={[6, 6, 0, 0]}>
-                        {likingData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={entry.color}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
+                  {/* Submit Button */}
+                  <button
+                    onClick={submitVote}
+                    disabled={!scenarioVoteLike}
+                    className={`w-full py-2 rounded-full text-[15px] font-medium transition-all ${
+                      scenarioVoteLike
+                        ? "bg-[#5B9EFF] text-white"
+                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    Abstimmen
+                  </button>
                 </div>
               </div>
             </div>
             
             <InputBar />
+          </>
+        ) : (
+          <>
+            {/* Diskussionsvorschlag Screen */}
+            <div className="flex-1 overflow-y-auto bg-gray-100 px-4 py-6 flex flex-col">
+              {/* Main Card */}
+              <div className="bg-white rounded-[24px] p-6 shadow-lg mb-6">
+                <h2 className="text-[22px] font-bold text-gray-900 mb-4">Diskussionsvorschlag</h2>
+                <p className="text-[15px] text-gray-600 leading-relaxed mb-6">
+                  Basierend auf Ihren Antworten zum Thema "PFAS Verbot" könnte Anna Schmidt ein:e interessante:r Gesprächspartner:in sein.
+                </p>
+
+                {/* Background Section */}
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <h3 className="text-[15px] font-semibold text-gray-800 mb-3">Euer Background:</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">❌</span>
+                      <span className="text-[14px] text-gray-700">Unterschiedliche Meinungen zum Verbot.</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">✅</span>
+                      <span className="text-[14px] text-gray-700">Zustimmung, dass wir mehr Umweltschutz brauchen.</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">🤔</span>
+                      <span className="text-[14px] text-gray-700">Wollt beide mehr über Alternativen nachdenken.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-auto flex gap-3">
+                <button className="flex-1 py-3 rounded-xl border-2 border-white/30 bg-white text-black font-medium text-[15px] shadow-lg">
+                  Ignorieren
+                </button>
+                <button className="flex-1 py-3 rounded-xl bg-[#1e4fd8] text-white font-semibold text-[15px] shadow-lg ">
+                  Antworten
+                </button>
+              </div>
+            </div>
           </>
         )}
       </div>
