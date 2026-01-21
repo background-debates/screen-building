@@ -264,7 +264,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 gap-6">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4 gap-6">
       {/* Screen Slider Control */}
       <div className="bg-white rounded-2xl px-6 py-4 shadow-md w-full max-w-[390px]">
         <div className="text-sm font-medium text-gray-600 mb-2 text-center">
@@ -296,7 +296,7 @@ export default function App() {
       </div>
 
       {/* iPhone Container */}
-      <div className="w-full max-w-[390px] h-[844px] bg-white rounded-[50px] overflow-hidden flex flex-col relative shadow-xl">
+      <div className="w-full max-w-[390px] h-[844px] bg-white rounded-[50px] overflow-hidden flex flex-col relative">
         {/* Status Bar */}
         <div className="h-11 bg-white flex items-start px-6 pt-2 relative">
           <div className="text-[15px] font-semibold">13:45</div>
@@ -839,7 +839,7 @@ export default function App() {
             {/* Diskussionsvorschlag Screen */}
             <div className="flex-1 overflow-y-auto bg-gray-100 px-4 py-6 flex flex-col">
               {/* Main Card */}
-              <div className="bg-white rounded-[24px] p-6 shadow-lg mb-6">
+              <div className="bg-white rounded-[24px] p-6 mb-6">
                 <h2 className="text-[22px] font-bold text-gray-900 mb-4">Diskussionsvorschlag</h2>
                 <p className="text-[15px] text-gray-600 leading-relaxed mb-6">
                   Basierend auf Ihren Antworten zum Thema "PFAS Verbot" könnte Anna Schmidt ein:e interessante:r Gesprächspartner:in sein.
@@ -867,10 +867,10 @@ export default function App() {
 
               {/* Action Buttons */}
               <div className="mt-auto flex gap-3">
-                <button className="flex-1 py-3 rounded-xl border-2 border-white/30 bg-white text-black font-medium text-[15px] shadow-lg">
+                <button className="flex-1 py-3 rounded-xl border-2 border-white/30 bg-white text-black font-medium text-[15px]">
                   Ignorieren
                 </button>
-                <button className="flex-1 py-3 rounded-xl bg-[#1e4fd8] text-white font-semibold text-[15px] shadow-lg ">
+                <button className="flex-1 py-3 rounded-xl bg-[#1e4fd8] text-white font-semibold text-[15px] ">
                   Antworten
                 </button>
               </div>
