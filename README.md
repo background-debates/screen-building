@@ -8,4 +8,7 @@
   Run `npm i` to install the dependencies.
 
   Run `npm run dev` to start the development server.
+
+  Run `npm run build` to create the deployment and then push to deploy. 
+  
   # screen-building
