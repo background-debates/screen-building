@@ -60,7 +60,7 @@ const initialChatMessages = [
     name: "Anna Schmidt",
     time: "12:42",
     message:
-      "PFAS sind extrem langlebig und reichern sich in der Umwelt an. Wir sollten sie definitiv verbieten.",
+      "Das Verbrenner-Aus war richtig. Verbrenner stoßen zu viel CO₂ aus und schaden dem Klima.",
     stance: "Ja",
     isOwn: false,
     reactions: [
@@ -74,7 +74,7 @@ const initialChatMessages = [
     name: "Michael Weber",
     time: "12:43",
     message:
-      "Es gibt aber viele wichtige Anwendungen in der Medizin und Industrie. Ein komplettes Verbot wäre zu radikal.",
+      "Das Verbot würde zu früh kommen. Die Ladeinfrastruktur reicht noch nicht aus und E-Autos sind zu teuer.",
     stance: "Eher Nein",
     isOwn: false,
     reactions: [
@@ -90,7 +90,7 @@ const secondaryChatMessages = [
     id: 3,
     name: "Anna Schmidt",
     time: "12:44",
-    message: "Das ist ein unfairer Vergleich. Alkohol trinke ich freiwillig. PFAS nehme ich ungewollt über das Trinkwasser und die Nahrung auf, dagegen kann ich mich als Einzelperson kaum wehren.",
+    message: "Flugzeuge müssen wir ebenfalls anpacken, aber Autos betreffen unseren Alltag viel häufiger. Jeder Schulweg, jede Pendelstrecke – deshalb starten wir hier und verschärfen parallel die Regeln für Airlines.",
     stance: "Ja",
     isOwn: false,
     reactions: [
@@ -102,7 +102,7 @@ const secondaryChatMessages = [
     id: 4,
     name: "Günter Maier",
     time: "12:45",
-    message: "Das stimmt, aber von dem Einfluss von Alkohol auf die Gesundheit und die sozialen Schäden sind wir alle betroffen.",
+    message: "Das stimmt, aber von den wirtschaftlichen Folgen eines Verbots und dem Verlust von Arbeitsplätzen sind wir alle betroffen.",
     stance: "Eher Nein",
     isOwn: false,
     reactions: [
@@ -314,7 +314,7 @@ export default function App() {
             {currentScreen !== 5 && <ChevronLeft className="w-6 h-6" />}
           </button>
           <div className="absolute left-1/2 -translate-x-1/2 text-[17px] font-medium whitespace-nowrap">
-            {currentScreen !== 5 ? "PFAS Verbot" : ""}
+            {currentScreen !== 5 ? "Verbrenner-Aus" : ""}
           </div>
           <button className="p-1 ml-auto">
             <MoreVertical className="w-6 h-6" />
@@ -329,15 +329,17 @@ export default function App() {
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                   <div className="text-blue-500 font-bold text-xl">1</div>
                 </div>
-                <h3 className="text-[17px] font-semibold text-gray-900 mb-2">Vorgespräch auswerten</h3>
+                <h3 className="text-[17px] font-semibold text-gray-900 mb-2">Unterhausdebatte reflektieren</h3>
                 <p className="text-[14px] text-gray-500 mb-6 leading-relaxed">
-                  Bevor wir in den digitalen Chat starten: Was ist Ihnen aus der physischen Diskussion besonders im Gedächtnis geblieben?
+                  Bevor wir in den Chat starten:
+                  <br />
+                  Was ist Ihnen aus der Debatte besonders im Gedächtnis geblieben?
                 </p>
 
                 <div className="space-y-6">
                   <div>
                     <label className="text-[13px] font-medium text-gray-700 mb-2 block">
-                      Welches Argument ist Ihnen besonders im Gedächtnis geblieben?
+                      Welches Argument fanden Sie interessant?
                     </label>
                     <textarea 
                       className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-[15px] outline-none focus:border-blue-400 transition-colors min-h-[100px] resize-none"
@@ -384,7 +386,7 @@ export default function App() {
               <div className="mb-6 flex justify-start">
                 <div className="bg-white rounded-[18px] p-4 shadow-sm w-full">
                   <div className="text-[15px] font-medium mb-4 text-gray-800 text-center">
-                    Sollte PFAS verboten werden?
+                    War das Verbrenner-Aus richtig?
                   </div>
                   
                   {/* Voting Options */}
@@ -442,7 +444,7 @@ export default function App() {
                     <Lock className="w-8 h-8 text-gray-400" />
                   </div>
                   <div className="text-[15px] text-gray-500 leading-[22px] max-w-[240px]">
-                    Erst nach dem Abstimmen kannst du den weiteren Chatverlauf einsehen.
+                    Erst nach dem Abstimmen können Sie den weiteren Chatverlauf einsehen.
                   </div>
                 </div>
               </div>
@@ -458,7 +460,7 @@ export default function App() {
           <div className="mb-3 flex justify-start">
             <div className="bg-white rounded-[18px] p-3 shadow-sm w-full">
               <div className="text-xs font-medium mb-2 text-gray-600">
-                Sollte PFAS verboten werden?
+                War das Verbrenner-Aus richtig?
               </div>
               <div className="h-[180px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -503,9 +505,6 @@ export default function App() {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-[11px] text-gray-400 text-right mt-1">
-                12:40
-              </div>
             </div>
           </div>
 
@@ -513,7 +512,7 @@ export default function App() {
           {chatMessages.map((message, index) => (
             <div
               key={message.id}
-              className={`mb-3 flex ${message.isOwn ? "justify-end" : "justify-start"}`}
+              className={`mb- flex ${message.isOwn ? "justify-end" : "justify-start"}`}
               onClick={index === 0 ? openReactionScreen : undefined}
               style={{ cursor: index === 0 ? "pointer" : "default" }}
             >
@@ -566,8 +565,8 @@ export default function App() {
           <div className="mb-3 flex justify-center">
             <div className="bg-[#5B9EFF] text-white rounded-[18px] px-4 py-2 max-w-[280px]">
               <div className="text-[15px] leading-[20px]">
-                @Anna Wenn man PFAS verbieten soll, sollte man
-                auch andere ungesunde Substanzen wie Alkohol
+                @Anna Wenn man Verbrenner verbieten soll, sollte man
+                auch andere klimaschädliche Dinge wie Flugzeuge
                 verbieten?
               </div>
               <div className="text-[11px] opacity-80 text-right mt-1">
@@ -622,7 +621,7 @@ export default function App() {
             <div className="bg-[#5B9EFF] text-white rounded-[18px] px-4 py-3 max-w-[300px]">
               <div className="text-[13px] font-medium mb-2">📊 Tageszusammenfassung</div>
               <div className="text-[14px] leading-[20px]">
-                Die Diskussion zeigt unterschiedliche Meinungen zum PFAS-Verbot. Während einige Teilnehmer ein komplettes Verbot befürworten, weisen andere auf wichtige industrielle Anwendungen hin.
+                Die Diskussion zeigt unterschiedliche Meinungen zum Verbrenner-Aus. Während einige Teilnehmer ein komplettes Verbot befürworten, weisen andere auf fehlende Infrastruktur und wirtschaftliche Folgen hin.
               </div>
               <div className="text-[14px] leading-[20px] mt-2">
                 <span className="font-medium">🧠 Bemerkenswert:</span> Viele Teilnehmer haben auf Annas Antwort mit "Das sollten wir vertiefen" reagiert.
@@ -711,16 +710,10 @@ export default function App() {
             {/* Scenario Screen */}
             <div className="flex-1 overflow-y-auto bg-[#f0f0f5] px-6 py-8 flex flex-col">
               <div className="bg-white rounded-[24px] p-6 shadow-sm mb-6">
-                <h3 className="text-[17px] font-semibold text-gray-900 mb-4">Zukunftsszenario</h3>
+                <h3 className="text-[17px] font-semibold text-gray-900 mb-4">Ladeinfrastruktur</h3>
                 <p className="text-[15px] text-gray-700 leading-relaxed whitespace-pre-line">
-                  „Unser Wasser ist sauber“, protestierte Elli Lowener nun doch. „Jedenfalls sauber genug, dass wir kein Wasser aus Brasilien oder aus dem Himalaya importieren müssen. Sie plündern die letzten Naturreserven.“
-                  
-                  „Genau das tun wir nicht. Wir bezahlen einen nachhaltigen Preis und betreiben aktiven Naturschutz, weil die Wasserschützer strenge Kontrollen durchführen. Die Menschen in den Quellgebieten leben sehr gut davon, dass wir ihnen das Wasser abkaufen“, erwiderte Larson. Er wollte weiter ausholen und erklären, wie das Wasser durch den Menschen gequält wird. 
-                  
-                  Doch dann zögerte er, weil er die Wohnung nicht durch einen Streit mit der Maklerin verlieren wollte. „Liebe Frau Lowener, mir gefällt die Wohnung sehr gut. Ich möchte sie gern kaufen. Wollen wir die Einzelheiten beim Mittagessen besprechen?“, fragte er und wertete ihr Lächeln als Zustimmung. 
-                  
-                  „Ich möchte Sie gern einladen. In dieser Stadt gibt es das erste aquane Restaurant. Dort werden alle Speisen mit garantiert sauberem Wasser gekocht. Die haben sogar einen aquanen Wein.“
-                </p>
+                  Stellen Sie sich vor, es ist das Jahr 2035. Sie parken ihr Auto auf dem Supermarktparkplatz, steigen aus und gehen Einkaufen. Währenddessen lädt der Akku per Induktion, ohne, dass Sie etwas tun müssen.
+                   </p>
               </div>
               {/* Question Card */}
               <div className="mb-6 flex justify-start">
@@ -842,7 +835,7 @@ export default function App() {
               <div className="bg-white rounded-[24px] p-6 mb-6">
                 <h2 className="text-[22px] font-bold text-gray-900 mb-4">Diskussionsvorschlag</h2>
                 <p className="text-[15px] text-gray-600 leading-relaxed mb-6">
-                  Basierend auf Ihren Antworten zum Thema "PFAS Verbot" könnte Anna Schmidt ein:e interessante:r Gesprächspartner:in sein.
+                  Basierend auf Ihren Antworten zum Thema "Verbrenner-Aus" könnte Anna Schmidt ein:e interessante:r Gesprächspartner:in sein.
                 </p>
 
                 {/* Background Section */}
@@ -855,11 +848,11 @@ export default function App() {
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-lg">✅</span>
-                      <span className="text-[14px] text-gray-700">Zustimmung, dass wir mehr Umweltschutz brauchen.</span>
+                      <span className="text-[14px] text-gray-700">Einigkeit, dass wir mehr Umweltschutz brauchen.</span>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-lg">🤔</span>
-                      <span className="text-[14px] text-gray-700">Wollt beide mehr über Alternativen nachdenken.</span>
+                      <span className="text-[14px] text-gray-700">Ihr wollt beide mehr über Alternativen nachdenken.</span>
                     </div>
                   </div>
                 </div>
@@ -868,7 +861,7 @@ export default function App() {
               {/* Action Buttons */}
               <div className="mt-auto flex gap-3">
                 <button className="flex-1 py-3 rounded-xl border-2 border-white/30 bg-white text-black font-medium text-[15px]">
-                  Ignorieren
+                  Kein Interesse
                 </button>
                 <button className="flex-1 py-3 rounded-xl bg-[#1e4fd8] text-white font-semibold text-[15px] ">
                   Antworten
